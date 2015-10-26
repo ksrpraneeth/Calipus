@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.ytkoff.droidbenchmark.BenchmarkResult;
+import com.ytkoff.droidbenchmark.Models.BenchmarkResult;
 import com.ytkoff.droidbenchmark.DroidBenchmark;
 
 import benchmark.calipus.com.calipus.R;
@@ -67,6 +67,6 @@ public class BenchmarkChooser extends AppCompatActivity {
                 mDialog.dismiss();
             }
 
-        }.benchmark(BenchmarkChooser.this, QuicksortTask.class, 5000000L);
+        }.benchmark(BenchmarkChooser.this, QuicksortTask.class, 500000L);
     }
 }

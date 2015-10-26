@@ -5,6 +5,8 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.view.WindowManager;
 
+import com.ytkoff.droidbenchmark.Models.BenchmarkResult;
+
 /**
  * Created by KP on 10/4/15.
  */

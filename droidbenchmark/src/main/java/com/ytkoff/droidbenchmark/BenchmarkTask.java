@@ -8,16 +8,18 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.ytkoff.droidbenchmark.Models.BenchmarkResult;
+import com.ytkoff.droidbenchmark.Models.TimeInfo;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public abstract class BenchmarkTask {
 
     private static final String TAG = "DroidBenchmark";
     private static final DecimalFormat NUM_CYCLES_FORMATTER = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
-
-
 
 
     protected void onPreExecute() {
@@ -30,49 +32,57 @@ public abstract class BenchmarkTask {
         // Override me
     }
 
-    private void doExecution(long numTimes) {
+    private void doExecution() {
 
-        onPreExecute();
 
-        for (int i = 0; i < numTimes; i++) {
-            task();
-        }
+        task();
 
-        onPostExecute();
+
     }
 
     BenchmarkResult execute(long numCycles) {
 
         BenchmarkResult result = new BenchmarkResult();
+
         result.className = getClass().getSimpleName();
 
         Log.v(TAG, "----------------------------------------------------------");
         Log.v(TAG, String.format("Starting benchmark. Class name: %s", result.className));
 
-        long numWarmupCycles = 1000000L;
+        long numWarmupCycles = 1000L;
 
-        long startTime = timestamp();
-        doExecution(numWarmupCycles); // Warmup
-        long endTime = timestamp();
+        long totalElapsedTime = 0;
+        for (int i = 0; i < numWarmupCycles; i++) {
+            onPreExecute();
+            TimeInfo timeInfo = new TimeInfo();
+            timeInfo.startTime = timestamp();
+            doExecution(); // Warmup
+            timeInfo.endTime = timestamp();
+            Long elapsedTime = timeInfo.endTime - timeInfo.startTime;
+            totalElapsedTime = (long) (totalElapsedTime + elapsedTime);
 
-        double elapsedTime = endTime - startTime;
-        double avgTimePerTask = (double) elapsedTime / numWarmupCycles;
-
-        result.warmupDurationSecs = elapsedTime / 1e9;
+        }
+        double avgTimePerTask = (double) totalElapsedTime / numWarmupCycles;
+        result.warmupDurationSecs = totalElapsedTime / 1e9;
         result.warmupCycles = numWarmupCycles;
         result.warmupAvgTaskTimeNs = avgTimePerTask;
         Log.v(TAG, "-");
         Log.v(TAG, String.format("Warmup duration: %f seconds. Cycles: %s", result.warmupDurationSecs, NUM_CYCLES_FORMATTER.format(numWarmupCycles)));
         Log.v(TAG, String.format("Average time per task during warmup: %f nanoseconds", avgTimePerTask));
+  /////////////////Starting to calculate real benchmark after warmup;
+        totalElapsedTime = 0;
+        for (int i = 0; i < numCycles; i++) {
+            onPreExecute();
+            TimeInfo timeInfo = new TimeInfo();
+            timeInfo.startTime = timestamp();
+            doExecution();
+            timeInfo.endTime = timestamp();
+            Long elapsedTime = timeInfo.endTime - timeInfo.startTime;
+            totalElapsedTime = (long) (totalElapsedTime + elapsedTime);
 
-        startTime = System.nanoTime();
-        doExecution(numCycles);
-        endTime = System.nanoTime();
-
-        elapsedTime = endTime - startTime;
-        avgTimePerTask = (double) elapsedTime / numCycles;
-
-        result.benchmarkDurationSecs = elapsedTime / 1e9;
+        }
+        avgTimePerTask = (double) totalElapsedTime / numWarmupCycles;
+        result.benchmarkDurationSecs = totalElapsedTime / 1e9;
         result.benchmarkCycles = numCycles;
         result.benchmarkAvgTaskTimeNs = avgTimePerTask;
         Log.v(TAG, "-");

@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.ytkoff.droidbenchmark.BenchmarkResult;
+import com.ytkoff.droidbenchmark.Models.BenchmarkResult;
 import com.ytkoff.droidbenchmark.DroidBenchmark;
 
 import java.text.DecimalFormat;
@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.tv_warmup_duration)).setText(String.valueOf(result.warmupDurationSecs)+ " Sec");
         ((TextView) findViewById(R.id.tv_warmup_cycles)).setText(NUM_CYCLES_FORMATTER.format(result.warmupCycles));
-        ((TextView) findViewById(R.id.tv_warmup_avg_time)).setText(String.valueOf(result.warmupAvgTaskTimeNs)+ "Nano Sec");
+        ((TextView) findViewById(R.id.tv_warmup_avg_time)).setText(String.valueOf(result.warmupAvgTaskTimeNs)+ " Nano Sec");
 
         ((TextView) findViewById(R.id.tv_benchmarking_duration)).setText(String.valueOf(result.benchmarkDurationSecs)+" Sec");
         ((TextView) findViewById(R.id.tv_benchmarking_cycles)).setText(NUM_CYCLES_FORMATTER.format(result.benchmarkCycles));
-        ((TextView) findViewById(R.id.tv_benchmarking_avg_time)).setText(String.valueOf(result.benchmarkAvgTaskTimeNs) + "Nano Sec");
+        ((TextView) findViewById(R.id.tv_benchmarking_avg_time)).setText(String.valueOf(result.benchmarkAvgTaskTimeNs) + " Nano Sec");
     }
     public void startBenchmark(View v) {
         new DroidBenchmark() {
