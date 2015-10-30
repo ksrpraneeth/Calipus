@@ -11,7 +11,7 @@ import benchmark.calipus.com.calipus.Algorithms.MergeSort;
  */
 public class MergeSortTask extends BenchmarkTask {
     private int[] numbers;
-    private final static int SIZE = 10;
+    private final static int SIZE = 100;
     private final static int MAX = 100;
 
     @Override

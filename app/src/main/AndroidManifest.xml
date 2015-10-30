@@ -31,7 +31,7 @@
             android:theme="@style/FullscreenTheme"></activity>
         <activity
             android:name=".Activities.Splash"
-            android:label="@string/title_activity_splash"
+            android:label="Calipus"
             android:theme="@style/AppBaseTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
